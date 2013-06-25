@@ -55,3 +55,12 @@ test("Thread status III (manual creating and running)", function () {
 	thread.run();
 	ok(thread.getStatus() == TL.ThreadStatus.RUNNING, "Manually run thread");
 });
+
+test("Test exceptions", function () {
+	var thread = new TL.Thread();
+	var set = function() {
+		thread.setFunction(null);
+	}
+	
+	throws(set, TL.ThreadError, "Setting an invalid thread function");
+});

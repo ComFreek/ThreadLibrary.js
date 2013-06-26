@@ -64,7 +64,7 @@ module TL {
 
             var code = [
                 'this.addEventListener("message", function(evt) {',
-                    'var ret = ((function(data){' + funcBody + '})).call(evt.target, evt.data);',
+                    'var ret = (' + rawFuncCode + ').call(evt.target, evt.data);',
                     'this.postMessage(ret);',
                 '}, false);'
             ].join("");

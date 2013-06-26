@@ -9,7 +9,7 @@ asyncTest("Thread return value", function () {
 		});
 });
 
-asyncTest("Kill thread", function () {
+/*asyncTest("Kill thread", function () {
 	var thread = new TL.Thread(function () {
 		var sleep = function (ms) { 
 			var end = new Date().getTime() + (ms);
@@ -29,7 +29,7 @@ asyncTest("Kill thread", function () {
 		ok(true, "Thread killed successfully");
 		start();
 	}, 750);
-});
+});*/
 
 test("Thread status", function () {
 	var thread = new TL.Thread();
@@ -63,4 +63,25 @@ test("Test exceptions", function () {
 	}
 	
 	throws(set, TL.ThreadError, "Setting an invalid thread function");
+});
+
+asyncTest("Test thread function with variable name other than 'data'", function () {
+	var thread = new TL.Thread(function (myData) {
+		return myData;
+	});
+	
+	var good = false;
+	
+	thread.send(5, function (retVal) {
+		ok(retVal == 5, "Thread should return the same value");
+		start();
+		good = true;
+	});
+	
+	window.setTimeout(function () {
+		if (!good) {
+			ok(false, "Thread did not return");
+			start();
+		}
+	}, 100);
 });

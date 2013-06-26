@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Progress And Finish Event</title>
+	</head>
+	
+	<body>
+		<output id="log"></output>
+	
+		<script src="../build/all.js"></script>
+		<script>
+			function log(msg) {
+				var logObj = document.getElementById("log");
+				logObj.innerHTML += msg + "<br />";
+			}
+			
+			var thread = new TL.Thread(function (myData) {
+				// build and send powers of myData
+				for (var i=0; i<5; i++) {
+					send(Math.pow(myData, i));
+				}
+				// send/return last power (=5)
+				return Math.pow(myData, i+1);
+			});
+			
+			thread.send(5,
+				function progress (retVal) {
+					log('Got value "' + retVal + '".');
+				},
+				function finish (retVal) {
+					log('Finished with value "' + retVal + '"');
+				}
+			);
+		</script>
+	</body>
+</html>

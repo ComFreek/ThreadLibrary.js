@@ -63,9 +63,10 @@ module TL {
             var funcBody = func.toString().substring(rawFuncCode.indexOf("{") + 1, rawFuncCode.lastIndexOf("}"));
 
             var code = [
+                'var send = function (data) { this.postMessage({data: data}); };',
                 'this.addEventListener("message", function(evt) {',
                     'var ret = (' + rawFuncCode + ').call(evt.target, evt.data);',
-                    'this.postMessage(ret);',
+                    'this.postMessage({data: ret, finished: true});',
                 '}, false);'
             ].join("");
 
@@ -91,9 +92,11 @@ module TL {
         /**
          * Sends data to the thread's function.
          * @param {object} data Any data you want.
-         * @param {function} callback A callback function whichs gets passed the returned value from the thread (as its first argument).
+         * @param {function} prgCallback A callback function whichs gets passed the returned value from the thread (as its first argument).
+         *                               This function will also get passed a boolean indicating whether the function has finished or is still executing, as second argument if you don't pass an end callback.
+         * @param {function} endCallback An optional callback function which gets called when the thread's function returns.
          */
-        public send(data: any, callback: (ret: any) => any) {
+        public send(data: any, prgCallback: (ret: any, finished?: boolean) => any, endCallback?: (ret: any) => any) {
             if (this.status != ThreadStatus.RUNNING) {
                 return false;
             }
@@ -101,10 +104,20 @@ module TL {
             var thread = this;
             var worker = this.worker;
 
-            if (typeof callback == "function") {
+            if (typeof prgCallback == "function") {
                 var wrapperCallback = function (evt) {
-                    callback.call(thread, evt.data);
-                    worker.removeEventListener("message", wrapperCallback, false);
+                    if (evt.data["finished"]) {
+                        if (endCallback) {
+                            endCallback(evt.data.data);
+                        }
+                        else {
+                            prgCallback(evt.data.data, true);
+                        }
+                        worker.removeEventListener("message", wrapperCallback, false);
+                    }
+                    else {
+                        prgCallback(evt.data.data, false);
+                    }
                 };
                 worker.addEventListener("message", wrapperCallback, false);
             }

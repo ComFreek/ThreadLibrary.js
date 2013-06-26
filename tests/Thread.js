@@ -87,3 +87,61 @@ asyncTest("Test thread function with variable name other than 'data'", function 
 		}
 	}, 100);
 });
+
+asyncTest("Test progress communication", function () {
+	var thread = new TL.Thread(function () {
+		var i = 0;
+
+		do {
+			send(i);
+		} while (i++ < 2);
+
+		return i;
+	});
+	
+	var counter = 0;
+	var good = false;
+	
+	thread.send(0,
+		function progress(i) {
+			ok(counter == i, "Progress data matched");
+			counter++;
+		},
+		function finished(retVal) {
+			ok(retVal == counter, "End data matched");
+			start();
+			good = true;
+		}
+	);
+	
+	window.setTimeout(function () {
+		if (!good) {
+			ok(false, "Thread did not finish");
+			start();
+		}
+	}, 250);
+});
+
+asyncTest("Test progress communication without finished event", function () {
+	var thread = new TL.Thread(function () {
+		var i = 0;
+
+		for (var i=0; i<5; i++) {
+			send(i);
+		}
+
+		return 23; // Michael Jordan
+	});
+	
+	var counter = 0;
+	thread.send(0, function prg(data, finished) {
+		if (data == 23) {
+			ok(finished == true, "Finished flag");
+			start();
+		}
+		else {
+			ok(data == counter, "Counter ok (progress event)");
+			counter++;
+		}
+	});
+});

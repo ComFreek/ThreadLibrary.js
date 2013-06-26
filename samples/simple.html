@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Simple</title>
+	</head>
+	
+	<body>
+	
+		<script src="../build/all.js"></script>
+		<script>
+			var thread = new TL.Thread(function (myData) {
+				return myData * myData;
+			});
+			
+			thread.send(5, function (retVal) {
+				alert(retVal); // should alert 25
+			});
+		</script>
+	</body>
+</html>

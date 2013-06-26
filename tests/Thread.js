@@ -9,7 +9,7 @@ asyncTest("Thread return value", function () {
 		});
 });
 
-/*asyncTest("Kill thread", function () {
+asyncTest("Kill thread", function () {
 	var thread = new TL.Thread(function () {
 		var sleep = function (ms) { 
 			var end = new Date().getTime() + (ms);
@@ -19,9 +19,11 @@ asyncTest("Thread return value", function () {
 		sleep(500);
 	});
 	
+
 	thread.send(null, function () {
 		ok(false, "Thread continued although it should be killed");
 		start();
+		good = true;
 	});
 	thread.kill();
 	
@@ -29,7 +31,7 @@ asyncTest("Thread return value", function () {
 		ok(true, "Thread killed successfully");
 		start();
 	}, 750);
-});*/
+});
 
 test("Thread status", function () {
 	var thread = new TL.Thread();

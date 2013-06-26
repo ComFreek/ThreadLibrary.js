@@ -3,6 +3,20 @@ ThreadLibrary.js
 
 Library for creating simple threads (web workers) directly out of JavaScript functions without external files.
 
+## Quick sample
+```
+<script src="build/all.js"></script>
+
+<script>
+  var squareThread = new TL.Thread(function (number) {
+    return number * number;
+  });
+  
+  squareThread.send(5, function (result) {
+    alert(result); // will alert "25"
+  });
+</script>
+```
 
 How to build
 =============
@@ -10,7 +24,7 @@ How to build
 ```
 npm install -g typescript
 ```
-<br /><br />
+<br />
 You can also use the Visual Studio 2012 plugin from [Microsoft Download Center](http://www.microsoft.com/en-us/download/details.aspx?id=34790)
 
 2. Execute `build.ps1` (on Windows) or `build.sh` (\*nix)

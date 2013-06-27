@@ -27,7 +27,7 @@ npm install -g typescript
 <br />
 You can also use the Visual Studio 2012 plugin from [Microsoft Download Center](http://www.microsoft.com/en-us/download/details.aspx?id=34790)
 
-2. Execute `build.ps1` (on Windows) or `build.sh` (\*nix)
+2. Execute `build/build.ps1` (on Windows) or `build/build.sh` (\*nix)
 
 3. Try out the samples and enjoy.
 

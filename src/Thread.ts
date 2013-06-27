@@ -158,3 +158,5 @@ module TL {
         (<any> window).Worker
     );
 }
+
+window["TL"] = TL;

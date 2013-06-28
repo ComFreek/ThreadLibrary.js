@@ -1,8 +1,8 @@
 /**
- * "Thread Libary" for JavaScript.
+ * Declares the class "Thread" for working with threads (web workers) created from functions
+ * instead of external files.
  *
- * Credits to MeiKatz <https://github.com/MeiKatz> for this great idea and the previous code base.
- * This is a (almost complete) rewrite in TypeScript.
+ * @license See LICENSE file.
  */
 module TL {
     export class ThreadError {

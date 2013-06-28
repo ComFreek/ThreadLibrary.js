@@ -1,10 +1,9 @@
 /// <reference path="Thread.ts" />
 
 /**
- * "Thread Libary" for JavaScript.
- *
- * Credits to MeiKatz <https://github.com/MeiKatz> for this great idea and the previous code base.
- * This is a (almost complete) rewrite in TypeScript.
+ * Declares the class "ThreadGroup" for managing a group of "Thread" objects.
+ * 
+ * @license See LICENSE file.
  */
 module TL {
     /**

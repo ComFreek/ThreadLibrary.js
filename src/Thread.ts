@@ -67,9 +67,7 @@ module TL {
             // build up code
             var code = "";
             if (typeof importFuncs !== "undefined") {
-                for (var i in importFuncs) {
-                    code += importFuncs[i].toString() + ";";
-                }
+                code += importFuncs.join(";") + ";";
             }
 
             code += [

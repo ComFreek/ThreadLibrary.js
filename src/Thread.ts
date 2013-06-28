@@ -83,7 +83,7 @@ module TL {
 
             var $this = this;
             this.worker.addEventListener("error", function (evt: any) {
-                $this.kill();
+                $this.destroy();
                 $this.status = ThreadStatus.ERROR;
                 throw new ThreadError("Thread terminated with error \"" + evt.message + "\"");
             }, false);

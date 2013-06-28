@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Import local function</title>
+	</head>
+	
+	<body>
+	
+		<script src="../build/out/all.js"></script>
+		<script>
+			// will be imported into our thread
+			function square(i) {
+				return i*i;
+			}
+			
+			var thread = new TL.Thread();
+			
+			thread.setFunction(function (myData) {
+				return square(myData);
+			}, [square]);
+			
+			thread.run();
+			
+			thread.send(5, function (retVal) {
+				alert(retVal); // should alert 25
+				// Destroy thread (i.e. free memory for BLOB url object)
+				this.destroy();
+			});
+		</script>
+	</body>
+</html>

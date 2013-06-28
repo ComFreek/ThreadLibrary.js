@@ -145,3 +145,35 @@ asyncTest("Test progress communication without finished event", function () {
 		}
 	});
 });
+
+asyncTest("Import local functions", function () {
+	var thread = new TL.Thread();
+	function square (i) {
+		return i*i;
+	}
+	function square2 (i) {
+		return i*i;
+	}
+	
+	thread.setFunction(function (i) {
+			return square(i) / square2(i); // always = 1
+		},
+		[square, square2]
+	);
+
+	thread.run();
+	thread.send(5, function (retVal) {
+		ok(retVal == 1);
+		start();
+	});
+	
+	// Catching the thread's exception with try...catch won't work
+	// because the exception is thrown asynchronously (@todo btw).
+	// Therefore, we use a rather long timeout for the browser.
+	window.setTimeout(function () {
+		if (thread.status == TL.ThreadStatus.ERROR) {
+			ok(false, "Thread threw an error, see browser's JS console");
+			start();
+		}
+	}, 125);
+});

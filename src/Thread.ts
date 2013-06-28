@@ -53,8 +53,10 @@ module TL {
         /**
          * Sets the thread's function.
          * @param {function} func The function.
+         * @param {function} importFuncs An array of function references which should be imported into the thread's context.
+         *                               These functions MUST be declared via "function x() {}" (instead of "var y = function x() {}, etc.)!
          */
-        public setFunction(func: () => any) {
+        public setFunction(func: () => any, importFuncs?: any[]) {
             if (typeof func != "function") {
                 throw new ThreadError("The supplied argument is not a function");
             }
@@ -62,7 +64,15 @@ module TL {
             var rawFuncCode = func.toString();
             var funcBody = func.toString().substring(rawFuncCode.indexOf("{") + 1, rawFuncCode.lastIndexOf("}"));
 
-            var code = [
+            // build up code
+            var code = "";
+            if (typeof importFuncs !== "undefined") {
+                for (var i in importFuncs) {
+                    code += importFuncs[i].toString() + ";";
+                }
+            }
+
+            code += [
                 'var send = function (data) { this.postMessage({data: data}); };',
                 'this.addEventListener("message", function(evt) {',
                     'var ret = (' + rawFuncCode + ').call(evt.target, evt.data);',

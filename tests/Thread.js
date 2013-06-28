@@ -177,3 +177,30 @@ asyncTest("Import local functions", function () {
 		}
 	}, 125);
 });
+
+asyncTest("Import local anonymous/variable bound functions", function () {
+	var thread = new TL.Thread();
+	var square = function (i) {
+		return i*i;
+	};
+	thread.setFunction(function (myData) {
+		return square(myData) / square2(myData); // always = 1
+	}, [{name: "square", func: square}, {name: "square2", func: function (i) {return i*i}}]);
+	
+	thread.run();
+	
+	thread.send(5, function (retVal) {
+		ok(retVal == 1, "Importing variable bound and anonymous function worked");
+		start();
+	});
+	
+	// Catching the thread's exception with try...catch won't work
+	// because the exception is thrown asynchronously (@todo btw).
+	// Therefore, we use a rather long timeout for the browser.
+	window.setTimeout(function () {
+		if (thread.status == TL.ThreadStatus.ERROR) {
+			ok(false, "Thread threw an error, see browser's JS console");
+			start();
+		}
+	}, 125);
+});

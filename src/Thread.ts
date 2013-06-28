@@ -53,8 +53,10 @@ module TL {
         /**
          * Sets the thread's function.
          * @param {function} func The function.
-         * @param {function} importFuncs An array of function references which should be imported into the thread's context.
-         *                               These functions MUST be declared via "function x() {}" (instead of "var y = function x() {}, etc.)!
+         * @param {array} importFuncs An array of function references which should be imported into the thread's context.
+         *                            If you want to use functions which were not declared with "function"
+         *                            (e.g. with var x = function(){}), you have to insert the object below into the array:
+         *                            {name: [name of function you want in the thread], func: [func reference]}
          */
         public setFunction(func: () => any, importFuncs?: any[]) {
             if (typeof func != "function") {
@@ -67,7 +69,16 @@ module TL {
             // build up code
             var code = "";
             if (typeof importFuncs !== "undefined") {
-                code += importFuncs.join(";") + ";";
+                for (var i in importFuncs) {
+                    var elem = importFuncs[i];
+
+                    if (typeof elem == "function") {
+                        code += elem.toString() + ";";
+                    }
+                    else {
+                        code += elem.func.toString().replace(/function/g, "function " + elem.name) + ";"
+                    }
+                }
             }
 
             code += [

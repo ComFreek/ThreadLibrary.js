@@ -14,11 +14,16 @@
 				return i*i;
 			}
 			
+			// "variable bound" function
+			var square2 = function (i) {
+				return i*i;
+			}
+			
 			var thread = new TL.Thread();
 			
 			thread.setFunction(function (myData) {
 				return square(myData);
-			}, [square]);
+			}, [square, {name: "square2", func: square2}] );
 			
 			thread.run();
 			

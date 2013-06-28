@@ -28,6 +28,8 @@
 				log('Got value "' + retVal + '".');
 				if (finished) {
 					log('Now finished.');
+					// Destroy thread (i.e. free memory for BLOB url object)
+					this.destroy();
 				}
 			});
 		</script>

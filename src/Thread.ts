@@ -101,22 +101,22 @@ module TL {
                 return false;
             }
 
-            var thread = this;
+            var $thread = this;
             var worker = this.worker;
 
             if (typeof prgCallback == "function") {
                 var wrapperCallback = function (evt) {
                     if (evt.data["finished"]) {
                         if (endCallback) {
-                            endCallback(evt.data.data);
+                            endCallback.call($thread, evt.data.data);
                         }
                         else {
-                            prgCallback(evt.data.data, true);
+                            prgCallback.call($thread, evt.data.data, true);
                         }
                         worker.removeEventListener("message", wrapperCallback, false);
                     }
                     else {
-                        prgCallback(evt.data.data, false);
+                        prgCallback.call($thread, evt.data.data, false);
                     }
                 };
                 worker.addEventListener("message", wrapperCallback, false);
@@ -131,10 +131,20 @@ module TL {
             }
 
             this.worker.terminate();
-            (<any> window).URL.revokeObjectURL(this.url);
             this.status = ThreadStatus.TERMINATED;
 
             return true;
+        }
+
+        public destroy() {
+            this.kill();
+
+            if (this.url !== null) {
+                (<any> window).URL.revokeObjectURL(this.url);
+                this.url = null;
+            }
+
+            this.status = ThreadStatus.TERMINATED;
         }
 
         public getStatus() {

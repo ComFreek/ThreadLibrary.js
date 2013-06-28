@@ -39,3 +39,5 @@ Author
 Credits
 ========
 I got the idea from [MeiKatz](https://github.com/MeiKatz) and his similar project: [JavaScript-Thread](https://github.com/MeiKatz/javascript-thread).
+
+Thanks for the mutual inspiration of our both projects ;)

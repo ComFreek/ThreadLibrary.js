@@ -22,13 +22,14 @@
 			var thread = new TL.Thread();
 			
 			thread.setFunction(function (myData) {
-				return square(myData);
+				return square(myData) / square2(myData);
+				// this should always return 1!
 			}, [square, {name: "square2", func: square2}] );
 			
 			thread.run();
 			
 			thread.send(5, function (retVal) {
-				alert(retVal); // should alert 25
+				alert(retVal); // should alert 1
 				// Destroy thread (i.e. free memory for BLOB url object)
 				this.destroy();
 			});

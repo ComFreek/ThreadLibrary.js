@@ -18,8 +18,8 @@ Library for creating simple threads (web workers) directly out of JavaScript fun
 </script>
 ```
 
-How to build
-=============
+## How to build
+
 1. Install [TypeScript](http://www.typescriptlang.org/) if you haven't already:
 ```
 npm install -g typescript
@@ -31,6 +31,16 @@ You can also use the Visual Studio 2012 plugin from [Microsoft Download Center](
 
 3. Try out the samples and enjoy.
 
+
+## Browser compatibility
+
+Tested with:
+- Google Chrome 27
+- Mozilla Firefox 22
+
+Works definitely not with:
+- Safari 5 on Windows
+- IE 10
 
 Author
 ========

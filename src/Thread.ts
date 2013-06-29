@@ -72,9 +72,16 @@ module TL {
                 for (var i in importFuncs) {
                     var elem = importFuncs[i];
 
+                    // import local function (declared as 'function x(){}'
                     if (typeof elem == "function") {
                         code += elem.toString() + ";";
                     }
+                    // import external file
+                    else if (typeof elem == "string") {
+                       code += "importScripts(\"" + elem + "\");";
+                    }
+                    // import local function which were assigned to a variable or are anonymous
+                    // {name: [func name], func: [func ref]}
                     else {
                         code += elem.func.toString().replace(/function/g, "function " + elem.name) + ";"
                     }
